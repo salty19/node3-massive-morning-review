@@ -3,36 +3,25 @@ id = 0
 
 module.exports = {
     getAllCharacters: (req, res) => {
-        res.status(200).send(masterCharacterList)
+       const db = req.app.get('db')
+       db.get_all_characters()
+       .then(characters => res.status(200).send(characters))
+       .catch(err => res.status(500).send(err))
     },
     getCharacter: (req, res) => {
-        const {id} = req.params
-        const character = masterCharacterList.find(character => character.id === +id)
-        res.status(200).send(character)
+        
     },
     addCharacter: (req, res) => {
-        const newCharacter = {...req.body}
-        newCharacter.id = id
-        id++
-        masterCharacterList.push(newCharacter)
-        res.status(200).send(masterCharacterList)
+        const db = req.app.get('db')
+        const character = {...req.body}
+        db.add_character(newCharacter)
+        .then(newCharacter => res.status(200).send(newCharacter))
+        .catch(err => res.status(500).send(err))
     },
     editCharacter: (req, res) => {
-        const {id} = req.params
-        const {name, image} = req.body
-        const index = masterCharacterList.findIndex(character => character.id === +id)
-        const currentCharacter = {...masterCharacterList[index]}
-        masterCharacterList[index] = {
-            id: +id,
-            name: name || currentCharacter.name,
-            image: image || currentCharacter.image
-        }
-        res.status(200).send(masterCharacterList)
+        
     },
     deleteCharacter: (req, res) => {
-        const {id} = req.params
-        const index = masterCharacterList.findIndex(character => character.id === +id)
-        masterCharacterList.splice(index, 1)
-        res.status(200).send(masterCharacterList)
+        
     }
 }
